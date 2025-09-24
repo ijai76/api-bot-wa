@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SXTREAM API</title>
+<!-- Meta Tags -->
+  <meta name="description" content="Test and integrate our API endpoints directly in your browser with real-time results." />
+  <meta name="keywords" content="RestAPI" />
+  <meta name="author" content="SXTREAM" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="API SXTREAM - Explore the Power of Our API" />
+  <meta property="og:description" content="Test and integrate our API endpoints directly in your browser with real-time results" />
+  <meta property="og:image" content="https://i.imgur.com/giAV3We.jpeg" />
+  <meta property="og:url" content="https://api.sxtream.xyz/" />
+  <meta property="og:type" content="website" />
+  
+    <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SXTREAM - Explore the Power of Our API" />
+  <meta name="twitter:description" content="Test and integrate our API endpoints directly in your browser with real-time results" />
+  <meta name="twitter:image" content="https://i.imgur.com/giAV3We.jpeg" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+html {
+scroll-behavior: smooth;
+}
+body {
+font-family: 'Inter', sans-serif;
+background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.glass-effect {
+background: rgba(30, 41, 59, 0.8);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.collapsible {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapsible.expanded {
+max-height: 2000px;
+}
+
+/* NEW: Category content scrolling */
+.category-content {
+max-height: 600px; /* Limit height for scrolling */
+overflow-y: auto;
+overflow-x: hidden;
+}
+
+.category-content.expanded {
+max-height: 600px; /* Keep consistent height when expanded */
+}
+
+/* Enhanced scrollbar for category content */
+.category-content::-webkit-scrollbar {
+width: 8px;
+}
+
+.category-content::-webkit-scrollbar-track {
+background: rgba(30, 41, 59, 0.3);
+border-radius: 4px;
+}
+
+.category-content::-webkit-scrollbar-thumb {
+background: linear-gradient(180deg, #10b981, #059669);
+border-radius: 4px;
+}
+
+.category-content::-webkit-scrollbar-thumb:hover {
+background: linear-gradient(180deg, #059669, #047857);
+}
+
+/* Scroll indicators for categories */
+.category-scroll-indicator {
+position: absolute;
+right: 16px;
+top: 50%;
+transform: translateY(-50%);
+background: rgba(16, 185, 129, 0.8);
+color: white;
+padding: 4px 8px;
+border-radius: 12px;
+font-size: 10px;
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+z-index: 10;
+}
+
+.category-content:hover + .category-scroll-indicator,
+.category-content:focus-within + .category-scroll-indicator {
+opacity: 1;
+}
+
+.sidebar {
+transform: translateX(-100%);
+transition: transform 0.3s ease;
+}
+
+.sidebar.open {
+transform: translateX(0);
+}
+
+.sidebar-overlay {
+opacity: 0;
+visibility: hidden;
+transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+opacity: 1;
+visibility: visible;
+}
+
+.hamburger span {
+width: 25px;
+height: 3px;
+background-color: #10b981;
+margin: 3px 0;
+transition: 0.3s;
+border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+animation: spin 0.6s linear infinite;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+
+.pulse {
+animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.gradient-border {
+background: linear-gradient(45deg, #10b981, #3b82f6);
+padding: 1px;
+border-radius: 0.75rem;
+}
+
+.gradient-border-content {
+background: #1e293b;
+border-radius: 0.6875rem;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #1e293b;
+border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #10b981;
+border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #059669;
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+background: #1e293b;
+}
+
+/* Response container with scroll */
+.response-container {
+max-height: 400px;
+max-width: 100%;
+overflow: auto;
+border: 1px solid #374151;
+background: #000;
+border-radius: 0.5rem;
+position: relative;
+}
+
+.response-content {
+width: 100%;
+padding: 1rem;
+font-family: 'Courier New', monospace;
+font-size: 0.875rem;
+line-height: 1.5;
+color: #e5e7eb;
+white-space: pre-wrap;
+word-wrap: break-word;
+overflow-wrap: break-word;
+word-break: break-word;
+}
+
+/* Scroll indicators */
+.response-container::before {
+content: '';
+position: absolute;
+top: 0;
+right: 0;
+width: 20px;
+height: 20px;
+background: linear-gradient(45deg, transparent 50%, rgba(16, 185, 129, 0.3) 50%);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+
+.response-container:hover::before {
+opacity: 1;
+}
+
+.response-container::after {
+content: '';
+position: absolute;
+bottom: 0;
+right: 0;
+width: 20px;
+height: 20px;
+background: linear-gradient(-135deg, transparent 50%, rgba(16, 185, 129, 0.3) 50%);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+
+.response-container:hover::after {
+opacity: 1;
+}
+
+/* JSON syntax highlighting */
+.json-key {
+color: #60a5fa;
+}
+
+.json-string {
+color: #34d399;
+}
+
+.json-number {
+color: #fbbf24;
+}
+
+.json-boolean {
+color: #f87171;
+}
+
+.json-null {
+color: #9ca3af;
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+.desktop-grid {
+display: grid;
+grid-template-columns: 280px 1fr;
+min-height: 100vh;
+}
+
+.main-content {
+max-width: none;
+padding: 2rem;
+}
+
+.stats-grid {
+grid-template-columns: repeat(4, 1fr);
+gap: 1.5rem;
+}
+
+.endpoint-card {
+transition: all 0.3s ease;
+}
+
+.endpoint-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Larger category content on desktop */
+.category-content {
+max-height: 800px;
+}
+}
+
+@media (max-width: 768px) {
+.floating-whatsapp {
+position: fixed;
+bottom: 20px;
+right: 20px;
+z-index: 1000;
+}
+
+.response-container {
+max-height: 300px;
+}
+
+/* Smaller category content on mobile */
+.category-content {
+max-height: 400px;
+}
+}
+
+/* Enhanced animations */
+.fade-in {
+animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+from { transform: translateX(-20px); opacity: 0; }
+to { transform: translateX(0); opacity: 1); }
+}
+
+@keyframes shake-slow {
+  0%, 90%, 100% {
+    transform: rotate(-3deg) translateX(0);
+  }
+  92% { transform: rotate(-3deg) translateX(-4px); }
+  94% { transform: rotate(-3deg) translateX(4px); }
+  96% { transform: rotate(-3deg) translateX(-2px); }
+  98% { transform: rotate(-3deg) translateX(2px); }
+  99% { transform: rotate(-3deg) translateX(0); }
+}
+
+.animate-shake-custom {
+  animation: shake-slow 5s ease-in-out infinite;
+    animation-delay: 2s;
+  animation-iteration-count: infinite;
+}
+
+/* Empty state styling */
+.empty-response {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 2rem;
+color: #6b7280;
+min-height: 120px;
+}
+
+.empty-response i {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+opacity: 0.5;
+}
+
+/* Media content styling */
+.media-content {
+text-align: center;
+padding: 1rem;
+max-width: 100%;
+}
+
+.media-content img,
+.media-content video {
+border-radius: 0.5rem;
+box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+max-width: 100%;
+height: auto;
+margin: 0 auto;
+}
+
+/* Error styling */
+.error-response {
+color: #ef4444;
+background: rgba(239, 68, 68, 0.1);
+border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* NEW: Smooth scroll behavior for category navigation */
+.category-item {
+scroll-margin-top: 2rem;
+}
+
+/* NEW: Category header sticky positioning */
+.category-header {
+position: sticky;
+top: 0;
+background: rgba(30, 41, 59, 0.95);
+backdrop-filter: blur(10px);
+z-index: 5;
+}
+
+/* NEW: Endpoint item spacing for better scrolling */
+.endpoint-item {
+scroll-margin-top: 1rem;
+}
+</style>
+</head>
+<body class="text-white min-h-screen">
+<!-- Mobile Sidebar Overlay -->
+<div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onclick="toggleSidebar()"></div>
+
+<div class="desktop-grid">
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar fixed left-0 top-0 w-72 h-full glass-effect z-50 lg:transform-none lg:sticky lg:top-0 lg:h-screen lg:w-auto">
+<div class="flex flex-col h-full p-6">
+<div class="flex items-center justify-between mb-8">
+<div class="gradient-border">
+<div class="gradient-border-content px-4 py-2">
+<h1 class="text-xl font-bold text-emerald-400">SXTREAM</h1>
+</div>
+</div>
+<button class="lg:hidden text-gray-400 hover:text-white" onclick="toggleSidebar()">
+<i class="fas fa-times"></i>
+</button>
+</div>
+
+<nav class="space-y-2 flex-1">
+<a href="/" class="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-700/50 transition group">
+<i class="fas fa-home text-emerald-400 group-hover:scale-110 transition-transform"></i>
+<span>Home</span>
+</a>
+<a href="/docs" class="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-700/50 transition group">
+<i class="fas fa-book text-blue-400 group-hover:scale-110 transition-transform"></i>
+<span>Documentation</span>
+</a>
+<a href="/contributors" class="flex items-center gap-3 py-3 px-4 rounded-lg hover:bg-gray-700/50 transition group">
+<i class="fas fa-info-circle text-purple-400 group-hover:scale-110 transition-transform"></i>
+<span>Contributor</span>
+</a>
+</nav>
+
+<div class="mt-auto pt-6 border-t border-gray-700">
+<div class="text-center">
+<p class="text-sm text-gray-400">© 2025 SXTREAM API</p>
+<p class="text-xs text-gray-500 mt-1">v1.0.0</p>
+</div>
+</div>
+</div>
+</aside>
+
+<!-- Main Content -->
+<div class="min-h-screen flex flex-col">
+<!-- Header -->
+<header class="glass-effect border-b border-gray-700/50 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+<div class="flex items-center gap-4">
+<button id="hamburger" class="hamburger lg:hidden flex flex-col cursor-pointer" onclick="toggleSidebar()">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-lg flex items-center justify-center">
+<i class="fas fa-code text-sm text-white"></i>
+</div>
+<h1 class="text-xl font-semibold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+API Playground
+</h1>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a href="https://whatsapp.com/channel/0029Vavzy6tIiRordrPfQ13d" target="_blank" 
+class="hidden sm:flex w-11 h-11 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-xl items-center justify-center transition shadow-lg hover:shadow-emerald-500/25">
+<i class="fab fa-whatsapp text-lg"></i>
+</a>
+<!-- icon user -->
+<div id="userButton" class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center cursor-pointer">
+<i class="fas fa-user text-sm text-white"></i>
+</div>
+
+<!-- dropdown -->
+<div id="dropdownMenu" class="absolute top-12 right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-xl py-2 hidden z-50">
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+<a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
+</div>
+</div>
+</header>
+
+<!-- Main Content -->
+<main class="flex-1 main-content custom-scrollbar mx-auto px-4">
+<!-- Hero Section -->
+<div class="text-center mt-10 mb-10 fade-in">
+<div class="inline-block mb-4">
+<div class="bg-gradient-to-r from-emerald-500 to-cyan-500 text-black font-bold text-sm px-4 py-2 rounded-full shadow-lg glow inline-block animate-shake-custom">
+  <i class="fas fa-bolt mr-2"></i>SXTREAM API PLAYGROUND
+</div>
+</div>
+<h2 class="text-3xl font-bold mb-4">
+Test & Integrate 
+<span class="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+API Endpoints
+</span>
+</h2>
+<p class="text-gray-400 text-lg max-w-2xl mx-auto">
+Powerful API testing interface with real-time results and comprehensive documentation
+</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="glass-effect p-6 rounded-xl text-center endpoint-card">
+<div class="w-5 h-5 bg-emerald-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+<i class="fas fa-chart-line text-emerald-400 text-xl"></i>
+</div>
+<div id="request" class="text-emerald-400 text-md font-bold">0</div>
+<div class="text-gray-400 text-sm">Requests Today</div>
+</div>
+<div class="glass-effect p-6 rounded-xl text-center endpoint-card">
+<div class="w-5 h-5 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+<i class="fas fa-clock text-blue-400 text-xl"></i>
+</div>
+<div id="uptime" class="text-blue-400 text-md font-bold">0s</div>
+<div class="text-gray-400 text-sm">Server Uptime</div>
+</div>
+<div class="glass-effect p-6 rounded-xl text-center endpoint-card">
+<div class="w-5 h-5 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+<i class="fas fa-globe text-purple-400 text-xl"></i>
+</div>
+<div id="ip" class="text-purple-400 text-md font-bold">...</div>
+<div class="text-gray-400 text-sm">Your IP Address</div>
+</div>
+<div class="glass-effect p-6 rounded-xl text-center endpoint-card">
+<div class="w-5 h-5 bg-orange-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+<i class="fas fa-calendar-day text-orange-400 text-xl"></i>
+</div>
+<div id="current_time" class="text-orange-400 text-md font-bold">00:00:00</div>
+<div class="text-gray-400 text-sm">Current Time</div>
+</div>
+</div>
+
+<!-- Search -->
+<div class="mb-8">
+<div class="relative max-w-md mx-auto">
+<input id="searchInput" type="text" placeholder="Search endpoints..." oninput="filterEndpoints()" 
+class="w-full glass-effect border border-gray-600/50 rounded-xl px-6 py-4 pl-12 focus:outline-none focus:border-emerald-400 transition text-lg" />
+<i class="fas fa-search absolute left-4 top-5 text-gray-400"></i>
+</div>
+</div>
+
+<!-- Endpoints -->
+<div id="menuContainer" class="space-y-4">
+  <div class="text-center py-12">
+    <div class="w-12 h-12 border-4 border-emerald-400 border-t-transparent rounded-full loading-spinner mx-auto"></div>
+    <p class="mt-4 text-gray-400">Loading endpoints...</p>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="text-center text-sm text-gray-400 mt-12 mb-8">
+<p>© 2025 SXTREAM API</p>
+<p class="text-xs text-gray-500 mt-1">v1.0.0</p>
+</footer>
+</main>
+</div>
+</div>
+
+<!-- Mobile WhatsApp Button -->
+<a href="https://whatsapp.com/channel/0029Vavzy6tIiRordrPfQ13d" target="_blank" 
+class="floating-whatsapp sm:hidden w-14 h-14 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-full flex items-center justify-center shadow-lg transition">
+<i class="fab fa-whatsapp text-xl"></i>
+</a>
+
+<script>
+let allData = [];
+
+// Dropdown user
+document.addEventListener('DOMContentLoaded', function() {
+  const userButton = document.getElementById('userButton');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+
+  userButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdownMenu.contains(e.target) && !userButton.contains(e.target)) {
+      dropdownMenu.classList.add('hidden');
+    }
+  });
+});
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const hamburger = document.getElementById('hamburger');
+
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  hamburger.classList.toggle('active');
+}
+
+// ENHANCED: Toggle section with smooth scrolling
+function toggleSection(sectionId, iconId) {
+  const section = document.getElementById(sectionId);
+  const icon = document.getElementById(iconId);
+
+  section.classList.toggle('expanded');
+  
+  if (section.classList.contains('expanded')) {
+    icon.classList.remove('fa-chevron-down');
+    icon.classList.add('fa-chevron-up');
+    
+    // Smooth scroll to the expanded section after animation
+    setTimeout(() => {
+      section.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'nearest' 
+      });
+    }, 200);
+  } else {
+    icon.classList.remove('fa-chevron-up');
+    icon.classList.add('fa-chevron-down');
+  }
+}
+
+// Close sidebar when selecting menu (mobile)
+document.querySelectorAll('aside nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth < 1024) {
+      toggleSidebar();
+    }
+  });
+});
+
+// Enhanced JSON formatter with syntax highlighting
+function formatJSON(obj) {
+  const jsonString = JSON.stringify(obj, null, 2);
+  return jsonString
+    .replace(/(".*?")(\s*:\s*)/g, '<span class="json-key">$1</span>$2')
+    .replace(/:\s*(".*?")/g, ': <span class="json-string">$1</span>')
+    .replace(/:\s*(\d+\.?\d*)/g, ': <span class="json-number">$1</span>')
+    .replace(/:\s*(true|false)/g, ': <span class="json-boolean">$1</span>')
+    .replace(/:\s*(null)/g, ': <span class="json-null">$1</span>');
+}
+
+// Execute function with enhanced scrolling
+function execute(method, url, paramKey, inputId, resultId, timeId, mediaType, _, queryKey = '', hasModel = false, hasStyle = false) {
+  const base = location.origin;
+  const resultBox = document.getElementById(resultId);
+  const timeBox = document.getElementById(timeId);
+  const start = Date.now();
+
+  let fullUrl = base + url;
+  const params = new URLSearchParams();
+
+  // Collect parameters
+  if (paramKey) {
+    const keys = paramKey.split(',');
+    const inputWrapper = document.getElementById(`${inputId}-wrapper`);
+    if (inputWrapper) {
+      const inputs = inputWrapper.querySelectorAll('input');
+      inputs.forEach((input, index) => {
+        const key = keys[index] || `param${index + 1}`;
+        const val = input.value.trim();
+        if (val) params.append(key.trim(), val);
+      });
+    }
+  }
+
+  const modelVal = hasModel ? document.getElementById(`${inputId}-model`)?.value || '' : '';
+  const styleVal = hasStyle ? document.getElementById(`${inputId}-style`)?.value || '' : '';
+  const queryVal = queryKey ? document.getElementById(`${inputId}-query`)?.value || '' : '';
+
+  if (hasModel && modelVal) params.append('model', modelVal);
+  if (hasStyle && styleVal) params.append('style', styleVal);
+  if (queryKey && queryVal) params.append(queryKey, queryVal);
+
+  const execBtn = event.currentTarget;
+  const playIcon = execBtn.querySelector('.play-icon');
+  const spinner = execBtn.querySelector('.exec-spinner');
+
+  playIcon.style.display = 'none';
+  spinner.style.display = 'block';
+  execBtn.disabled = true;
+
+  resultBox.innerHTML = 
+    `<div class="response-container custom-scrollbar">
+      <div class="flex justify-center items-center py-8">
+        <div class="w-8 h-8 border-3 border-emerald-400 border-t-transparent rounded-full loading-spinner"></div>
+        <span class="ml-3 text-gray-400">Processing request...</span>
+      </div>
+    </div>`;
+    
+  timeBox.innerHTML = '<i class="fas fa-spinner fa-spin text-yellow-400"></i> Loading...';
+
+  const fetchOptions = {
+    method,
+    headers: { 'Content-Type': 'application/json' }
+  };
+
+  if (method === 'POST' && params.toString()) {
+    fetchOptions.body = JSON.stringify(Object.fromEntries(params));
+  } else if (method === 'GET') {
+    fullUrl += '?' + params.toString();
+  }
+
+  fetch(fullUrl, fetchOptions)
+  .then(async res => {
+    const end = Date.now();
+    const responseTime = end - start;
+    const statusColor = res.ok ? 'text-green-400' : 'text-red-400';
+    timeBox.innerHTML = `<i class="fas fa-clock ${statusColor}"></i> ${responseTime}ms`;
+
+    if (mediaType === 'jpeg' || mediaType === 'png' || mediaType === 'gif') {
+      const blob = await res.blob();
+      const imgURL = URL.createObjectURL(blob);
+      resultBox.innerHTML = 
+        `<div class="response-container custom-scrollbar">
+          <div class="media-content">
+            <img src="${imgURL}" alt="Result" class="rounded-lg shadow-lg max-w-full h-auto mx-auto" />
+          </div>
+        </div>`;
+    } else if (mediaType === 'mp4') {
+      const blob = await res.blob();
+      const videoURL = URL.createObjectURL(blob);
+      resultBox.innerHTML = 
+        `<div class="response-container custom-scrollbar">
+          <div class="media-content">
+            <video controls class="rounded-lg shadow-lg max-w-full h-auto mx-auto">
+              <source src="${videoURL}" type="video/mp4">
+            </video>
+          </div>
+        </div>`;
+    } else {
+      const data = await res.json();
+      const formattedJson = formatJSON(data);
+      
+      resultBox.innerHTML = 
+        `<div class="response-container custom-scrollbar">
+          <div class="response-content">
+            <div class="flex items-center justify-between mb-2 sticky top-0 bg-black/90 pb-2 border-b border-gray-700">
+              <span class="text-xs text-gray-400 font-medium">JSON Response</span>
+              <button onclick="copyToClipboard('${JSON.stringify(data).replace(/'/g, "\\'")}', this)" 
+                class="text-xs text-gray-400 hover:text-emerald-400 transition flex items-center gap-1">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+            </div>
+            <pre class="whitespace-pre-wrap break-words">${formattedJson}</pre>
+          </div>
+        </div>`;
+    }
+  })
+  .catch(err => {
+    timeBox.innerHTML = '<i class="fas fa-exclamation-triangle text-red-400"></i> Error';
+    resultBox.innerHTML = 
+      `<div class="response-container custom-scrollbar error-response">
+        <div class="response-content">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="fas fa-exclamation-triangle text-red-400"></i>
+            <span class="text-sm font-medium">Error Response</span>
+          </div>
+          <pre class="whitespace-pre-wrap break-words">${JSON.stringify({ error: err.message }, null, 2)}</pre>
+        </div>
+      </div>`;
+  })
+  .finally(() => {
+    spinner.style.display = 'none';
+    playIcon.style.display = 'inline';
+    execBtn.disabled = false;
+    
+    // Enhanced scroll to result
+    setTimeout(() => {
+      resultBox.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    }, 100);
+  });
+}
+
+// Copy to clipboard function
+function copyToClipboard(text, button) {
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    button.classList.add('text-green-400');
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.classList.remove('text-green-400');
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy: ', err);
+  });
+}
+
+// Update URL preview function
+function updateUrlPreview(base, url, param, value, previewId, inputId, hasModel, hasStyle, queryKey) {
+  const preview = document.getElementById(previewId);
+  if (!preview) return;
+
+  const params = new URLSearchParams();
+
+  if (param) {
+    const keys = param.split(',');
+    const inputWrapper = document.getElementById(`${inputId}-wrapper`);
+    if (inputWrapper) {
+      const inputs = inputWrapper.querySelectorAll('input');
+      inputs.forEach((input, index) => {
+        const key = keys[index] || `param${index + 1}`;
+        const val = input.value.trim();
+        if (val) params.append(key.trim(), val);
+      });
+    }
+  }
+
+  if (hasModel) {
+    const modelVal = document.getElementById(`${inputId}-model`)?.value || '';
+    if (modelVal) params.append('model', modelVal);
+  }
+
+  if (hasStyle) {
+    const styleVal = document.getElementById(`${inputId}-style`)?.value || '';
+    if (styleVal) params.append('style', styleVal);
+  }
+
+  if (queryKey) {
+    const queryVal = document.getElementById(`${inputId}-query`)?.value || '';
+    if (queryVal) params.append(queryKey, queryVal);
+  }
+
+  const queryString = params.toString();
+  preview.textContent = `${base}${url}${queryString ? '?' + queryString : ''}`;
+}
+
+// ENHANCED: Create menu structure with scrollable categories
+function createMenuStructure(data) {
+  const grouped = {};
+  data.forEach(item => {
+    const cat = item.category.toUpperCase();
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(item);
+  });
+
+  const container = document.getElementById("menuContainer");
+  container.innerHTML = "";
+  const base = location.origin;
+
+  Object.entries(grouped).forEach(([category, endpoints], i) => {
+    const menuId = `menuSection${i}`;
+    const iconId = `menuIcon${i}`;
+    const scrollIndicatorId = `scrollIndicator${i}`;
+
+    const menu = document.createElement("div");
+    menu.className = "glass-effect border border-gray-600/30 rounded-xl overflow-hidden endpoint-card slide-in category-item";
+
+    const categoryIcons = {
+      'ARTIFICIAL INTELLIGENCE': 'fas fa-brain text-purple-500',
+      'AI IMAGE': 'fas fa-image text-indigo-400',
+      'DOWNLOADER': 'fas fa-download text-blue-400',
+      'TOOLS': 'fas fa-wrench text-amber-500',
+      'STALKER': 'fas fa-user-secret text-red-500',
+      'NSFW': 'fas fa-eye-slash text-rose-500',
+      'GAMES': 'fas fa-gamepad text-green-500',
+      'SEARCH': 'fas fa-search text-yellow-400',
+      'GALLERY': 'fas fa-images text-pink-400',
+      'MAKER': 'fas fa-pen text-fuchsia-500',
+      'AUDIO': 'fas fa-music text-sky-500',
+      'RANDOM TEXT': 'fas fa-random text-lime-500'
+    };
+
+    const categoryIcon = categoryIcons[category] || 'fas fa-folder text-gray-400';
+
+    menu.innerHTML = 
+      `<div class="category-header flex items-center justify-between p-4 cursor-pointer hover:bg-gray-700/30 transition group" onclick="toggleSection('${menuId}', '${iconId}')">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gray-700/50 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="${categoryIcon}"></i>
+          </div>
+          <span class="font-semibold text-lg">${category}</span>
+          <span class="bg-gray-700/50 text-gray-400 text-xs px-2 py-1 rounded-full">${endpoints.length}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="text-xs text-gray-400 hidden lg:block">
+            ${endpoints.length > 3 ? 'Scrollable' : ''}
+          </div>
+          <i id="${iconId}" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+        </div>
+      </div>
+      <div id="${menuId}" class="collapsible border-t border-gray-600/30 relative">
+        <div class="category-content custom-scrollbar">
+          ${endpoints.map((item, j) => {
+            const subId = `${category.toLowerCase()}Section${i}_${j}`;
+            const subIconId = `${category.toLowerCase()}Icon${i}_${j}`;
+            const inputId = `${category.toLowerCase()}Input${i}_${j}`;
+            const resultId = `${category.toLowerCase()}Result${i}_${j}`;
+            const timeId = `${category.toLowerCase()}Time${i}_${j}`;
+            const previewId = `urlPreview-${i}-${j}`;
+
+            return `
+              <div class="endpoint-item p-6 border-b border-gray-600/20 last:border-b-0">
+                <div class="flex items-center justify-between cursor-pointer mb-6 group" onclick="toggleSection('${subId}', '${subIconId}')">
+                  <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3">
+                      <span class="${item.method === 'GET' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-400/30' : 'bg-blue-500/20 text-blue-400 border-blue-400/30'} px-3 py-1 rounded-lg text-sm font-mono border">${item.method}</span>
+                      <span class="font-medium text-lg">${item.nama}</span>
+                    </div>
+                  </div>
+                  <i id="${subIconId}" class="fas fa-chevron-down text-gray-400 transition-transform group-hover:text-white"></i>
+                </div>
+
+                <div id="${subId}" class="collapsible space-y-6">
+                  ${item.param ? 
+                    `<div id="${inputId}-wrapper" class="space-y-2">
+                      <h4 class="font-medium text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-cogs text-emerald-400"></i>
+                        Parameters
+                      </h4>
+                      <div class="grid gap-4 ${item.param.split(',').length > 1 ? 'lg:grid-cols-2' : ''}">
+                        ${item.param.split(',').map(key => 
+                          `<div>
+                            <label class="block text-sm font-medium mb-2 text-gray-300">
+                              ${key.trim()} <span class="text-red-400">*</span>
+                            </label>
+                            <input type="text" placeholder="Enter ${key.trim()}..." 
+                              class="w-full glass-effect border border-gray-600/50 rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-400 transition" 
+                              oninput="updateUrlPreview('${base}', '${item.url}', '${item.param}', '', '${previewId}', '${inputId}', ${!!item.model}, ${!!item.style}, '${item.query || ''}')" />
+                          </div>`
+                        ).join('')}
+                      </div>
+                    </div>`
+                   : ''}
+
+                  ${item.model ? 
+                    `<div>
+                      <label class="block text-sm font-medium mb-2 text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-cube text-blue-400"></i>
+                        Model
+                      </label>
+                      <select id="${inputId}-model" 
+                        onchange="updateUrlPreview('${base}', '${item.url}', '${item.param || ''}', '', '${previewId}', '${inputId}', true, ${!!item.style}, '${item.query || ''}')" 
+                        class="w-full glass-effect border border-gray-600/50 rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-400 transition">
+                        ${item.model.map(m => `<option value="${m}">${m}</option>`).join('')}
+                      </select>
+                    </div>`
+                   : ''}
+
+                  ${item.style ? 
+                    `<div>
+                      <label class="block text-sm font-medium mb-2 text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-palette text-purple-400"></i>
+                        Style
+                      </label>
+                      <select id="${inputId}-style" 
+                        onchange="updateUrlPreview('${base}', '${item.url}', '${item.param || ''}', '', '${previewId}', '${inputId}', ${!!item.model}, true, '${item.query || ''}')" 
+                        class="w-full glass-effect border border-gray-600/50 rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-400 transition">
+                        ${item.style.map(s => `<option value="${s}">${s}</option>`).join('')}
+                      </select>
+                    </div>`
+                   : ''}
+
+                  <div class="glass-effect p-4 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-medium text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-link text-yellow-400"></i>
+                        Request URL
+                      </span>
+                      <button onclick="navigator.clipboard.writeText(document.getElementById('${previewId}').textContent)" 
+                        class="text-gray-400 hover:text-emerald-400 transition">
+                        <i class="fas fa-copy"></i>
+                      </button>
+                    </div>
+                    <code id="${previewId}" class="text-sm text-emerald-400 break-all block bg-gray-800/50 p-3 rounded overflow-x-auto max-w-full whitespace-pre-wrap">${base}${item.url}</code>
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <button onclick="execute('${item.method}', '${item.url}', '${item.param || ''}', '${inputId}', '${resultId}', '${timeId}', '${item.media_type}', '', '${item.query || ''}', ${!!item.model}, ${!!item.style})" 
+                      class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 btn-sm py-3 rounded-lg flex items-center gap-3 transition shadow-lg hover:shadow-emerald-500/25">
+                      <i class="fas fa-play play-icon"></i>
+                      <div class="exec-spinner w-4 h-4 border-2 border-white border-t-transparent rounded-full loading-spinner" style="display: none;"></div>
+                      Execute Request
+                    </button>
+                    <span id="${timeId}" class="text-sm text-gray-400 flex items-center gap-2">
+                      <i class="fas fa-clock"></i>
+                      —
+                    </span>
+                  </div>
+
+                  <div class="glass-effect rounded-lg p-6">
+                    <div class="flex items-center gap-2 mb-4">
+                      <i class="fas fa-terminal text-cyan-400"></i>
+                      <span class="font-medium text-gray-300">Response</span>
+                    </div>
+                    <div id="${resultId}">
+                      <div class="response-container custom-scrollbar">
+                        <div class="empty-response">
+                          <i class="fas fa-code"></i>
+                          <p>No response yet</p>
+                          <p class="text-xs mt-1">Execute the request to see results here</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+        ${endpoints.length > 3 ? 
+          `<div id="${scrollIndicatorId}" class="category-scroll-indicator">
+            <i class="fas fa-arrows-alt-v"></i> Scroll
+          </div>` : ''}
+      </div>`;
+    container.appendChild(menu);
+  });
+}
+
+function filterEndpoints() {
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = allData.filter(item => 
+    item.nama.toLowerCase().includes(keyword) || 
+    item.category.toLowerCase().includes(keyword)
+  );
+  createMenuStructure(filtered);
+}
+
+// Load data
+fetch('/lol/routes')
+  .then(res => res.json())
+  .then(data => {
+    allData = data;
+    createMenuStructure(data);
+  })
+  .catch(err => {
+    document.getElementById("menuContainer").innerHTML = 
+      `<div class="text-center py-12">
+        <i class="fas fa-exclamation-triangle text-red-400 text-4xl mb-4"></i>
+        <p class="text-red-400 text-lg">Failed to load endpoints: ${err.message}</p>
+      </div>`;
+  });
+
+// Update stats
+function updateStats() {
+  fetch('/data/api')
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('request').textContent = data.Request || '0';
+      document.getElementById('uptime').textContent = data.runtime || '0s';
+    })
+    .catch(err => console.error('Stats error:', err));
+}
+setInterval(updateStats, 1000);
+updateStats();
+
+// Update time
+setInterval(() => {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  document.getElementById('current_time').textContent = time;
+}, 1000);
+
+// Get IP
+fetch('https://api.ipify.org?format=json')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('ip').textContent = data.ip;
+  })
+  .catch(err => console.error('IP error:', err));
+
+// ENHANCED: Add smooth scrolling for all anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// ENHANCED: Add keyboard shortcuts with scroll functionality
+document.addEventListener('keydown', function(e) {
+  // Ctrl/Cmd + K to focus search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+
+  // Escape to clear search
+  if (e.key === 'Escape' && document.activeElement === document.getElementById('searchInput')) {
+    document.getElementById('searchInput').value = '';
+    filterEndpoints();
+  }
+
+  // Arrow keys for category navigation when no input is focused
+  if (!document.activeElement.matches('input, select, textarea')) {
+    const categories = document.querySelectorAll('.category-item');
+    const currentlyExpanded = document.querySelector('.collapsible.expanded');
+    
+    if (e.key === 'ArrowDown' && categories.length > 0) {
+      e.preventDefault();
+      let nextCategory;
+      
+      if (currentlyExpanded) {
+        const currentCategory = currentlyExpanded.closest('.category-item');
+        const currentIndex = Array.from(categories).indexOf(currentCategory);
+        nextCategory = categories[currentIndex + 1] || categories[0];
+      } else {
+        nextCategory = categories[0];
+      }
+      
+      nextCategory.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    if (e.key === 'ArrowUp' && categories.length > 0) {
+      e.preventDefault();
+      let prevCategory;
+      
+      if (currentlyExpanded) {
+        const currentCategory = currentlyExpanded.closest('.category-item');
+        const currentIndex = Array.from(categories).indexOf(currentCategory);
+        prevCategory = categories[currentIndex - 1] || categories[categories.length - 1];
+      } else {
+        prevCategory = categories[categories.length - 1];
+      }
+      
+      prevCategory.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+});
+
+// ENHANCED: Add loading states with better UX
+window.addEventListener('load', function() {
+  document.body.classList.add('loaded');
+  
+  // Add intersection observer for category animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  // Observe category items when they're added
+  const observeCategories = () => {
+    document.querySelectorAll('.category-item:not(.observed)').forEach(item => {
+      observer.observe(item);
+      item.classList.add('observed');
+    });
+  };
+
+  // Initial observation
+  setTimeout(observeCategories, 1000);
+  
+  // Re-observe after filtering
+  document.getElementById('searchInput').addEventListener('input', () => {
+    setTimeout(observeCategories, 100);
+  });
+});
+
+// ENHANCED: Add scroll position memory for categories
+const categoryScrollPositions = new Map();
+
+// Save scroll position when category collapses
+const originalToggleSection = toggleSection;
+toggleSection = function(sectionId, iconId) {
+  const section = document.getElementById(sectionId);
+  const categoryContent = section.querySelector('.category-content');
+  
+  if (section.classList.contains('expanded') && categoryContent) {
+    // Save scroll position before collapsing
+    categoryScrollPositions.set(sectionId, categoryContent.scrollTop);
+  }
+  
+  originalToggleSection(sectionId, iconId);
+  
+  if (section.classList.contains('expanded') && categoryContent) {
+    // Restore scroll position after expanding
+    setTimeout(() => {
+      const savedPosition = categoryScrollPositions.get(sectionId) || 0;
+      categoryContent.scrollTop = savedPosition;
+    }, 400); // Wait for animation to complete
+  }
+};
+</script>
+</body>
+</html>
